@@ -27,7 +27,7 @@ var OSSnewsRN = React.createClass({
       <View style={styles.maincontainer}>
         <ScrollableTabView>
           <TabPageHottest tabLabel="Hottest" url={API_HOTTEST_URL} />
-          <TabPageRecent tabLabel="newest" url={API_NEWEST_URL} />
+          <TabPageRecent tabLabel="Newest" url={API_NEWEST_URL} />
         </ScrollableTabView>
       </View>
     );
