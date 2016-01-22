@@ -4,24 +4,25 @@ import React, {
   Text,
   View,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
+  IntentAndroid
 } from 'react-native';
 
 var moment = require('moment');
 var GiftedListView = require('react-native-gifted-listview');
-
-var url = '';
 
 class BaseNewsList extends React.Component {
 
   constructor (props) {
     super(props);
     console.log(props);
-    url = props.url;
+    //binding functions
+    this.fetchData = this.fetchData.bind(this);
+    this.renderNews = this.renderNews.bind(this);
   }
 
   fetchData(page = 1, callback, options) {
-    fetch(url + '?page=' + page)
+    fetch(this.props.url + '?page=' + page)
       .then((response) => response.json())
       .then((responseData) => {
         callback(responseData)
@@ -52,8 +53,14 @@ class BaseNewsList extends React.Component {
 
   renderNews(news) {
     var timeAgo = moment(news.created_at).fromNow();
+
+    function handleNewsClick () {
+      IntentAndroid.openURL(news.short_id_url);
+    }
+
     return (
-      <TouchableHighlight>
+      <TouchableHighlight
+        onPress={handleNewsClick}>
         <View style={styles.container}>
           <View style={styles.row}>
             <View style={styles.upcontainer}>
