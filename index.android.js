@@ -32,27 +32,6 @@ var OSSnewsRN = React.createClass({
       </View>
     );
   },
-
-  renderLoadingView: function() {
-    return (
-      <View style={styles.container}>
-        <Text>Loading news...</Text>
-      </View>
-    );
-  },
-
-  renderNews: function(news) {
-    return (
-      <TouchableHighlight>
-        <View style={styles.container}>
-          <View style={styles.row}>
-            <Text style={styles.title}>{news.title}</Text>
-          </View>
-          <View style={styles.separator} />
-        </View>
-      </TouchableHighlight>
-    );
-  },
 });
 
 const styles = StyleSheet.create({

@@ -3,53 +3,50 @@ import React, {
   StyleSheet,
   Text,
   View,
-  ListView,
+  ScrollView,
   TouchableHighlight
 } from 'react-native';
 
-var moment = require('moment')
+var moment = require('moment');
+var GiftedListView = require('react-native-gifted-listview');
+
+var url = '';
 
 class BaseNewsList extends React.Component {
+
   constructor (props) {
     super(props);
-    this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      }),
-      loaded: false,
-    };
-    this.fetchData()
+    console.log(props);
+    url = props.url;
   }
 
-  fetchData() {
-    fetch(this.props.url)
+  fetchData(page = 1, callback, options) {
+    fetch(url + '?page=' + page)
       .then((response) => response.json())
       .then((responseData) => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData),
-          loaded: true,
-        })
+        callback(responseData)
       })
       .done();
   }
 
   render () {
-    if (!this.state.loaded) {
-      return this.renderLoadingView();
-    }
     return (
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderNews}
+        <GiftedListView
+          rowView={this.renderNews}
+          onFetch={this.fetchData}
+          firstLoader={true}
+          pagination={true}
+          refreshable={true}
+          customStyles={{
+            refreshableView: {
+              backgroundColor: '#eee',
+            },
+          }}
+          PullToRefreshViewAndroidProps={{
+            colors: ['#ff0000', '#00ff00', '#0000ff'],
+            progressBackgroundColor: '#c8c7cc',
+          }}
         />
-    );
-  }
-
-  renderLoadingView() {
-    return (
-      <View style={styles.container}>
-        <Text>Loading news...</Text>
-      </View>
     );
   }
 
@@ -130,6 +127,9 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#CCCCCC',
+  },
+  scrollview: {
+    flex: 1,
   },
 });
 
